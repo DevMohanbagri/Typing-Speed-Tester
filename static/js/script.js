@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let startTime = null;
 
+    // Ensure textarea is disabled on load (debugging)
+    console.log('Initial textarea disabled state:', typingInput.disabled);
+    if (!typingInput.disabled) {
+        typingInput.disabled = true; // Force disable if not already
+    }
+
     // Prevent copy and context menu on text-to-type
     const textToTypeElement = document.getElementById('text-to-type');
     textToTypeElement.addEventListener('copy', (event) => {
@@ -18,11 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startBtn.addEventListener('click', () => {
         if (!startTime) {
-            typingInput.value = '';
+            // Enable textarea and start the test
             typingInput.disabled = false;
+            typingInput.value = '';
             typingInput.focus();
             startBtn.textContent = 'Submit';
             startTime = new Date();
+            console.log('Test started, textarea enabled');
         } else {
             submitTest();
         }
@@ -32,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if ((event.key === 'Enter' || event.keyCode === 13) && startTime && !typingInput.disabled) {
             event.preventDefault();
             submitTest();
+        } else if (!startTime && !typingInput.disabled) {
+            event.preventDefault(); // Block input if test hasn’t started
+            console.log('Input blocked, test not started');
         }
     });
 
@@ -56,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             wpmDisplay.textContent = data.wpm;
             accuracyDisplay.textContent = `${data.accuracy}%`;
-            typingInput.disabled = true;
+            typingInput.disabled = true; // Disable after submission
             startBtn.textContent = 'Restart';
             startBtn.onclick = function() {
                 console.log('Restarting...');
