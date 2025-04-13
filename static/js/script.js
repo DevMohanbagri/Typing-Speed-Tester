@@ -7,6 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let startTime = null;
 
+    // Prevent copy and context menu on text-to-type
+    const textToTypeElement = document.getElementById('text-to-type');
+    textToTypeElement.addEventListener('copy', (event) => {
+        event.preventDefault();
+    });
+    textToTypeElement.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+    });
+
     startBtn.addEventListener('click', () => {
         if (!startTime) {
             typingInput.value = '';
@@ -15,6 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.textContent = 'Submit';
             startTime = new Date();
         } else {
+            submitTest();
+        }
+    });
+
+    typingInput.addEventListener('keypress', (event) => {
+        if ((event.key === 'Enter' || event.keyCode === 13) && startTime && !typingInput.disabled) {
+            event.preventDefault();
             submitTest();
         }
     });
