@@ -43,6 +43,15 @@ textarea {
     border-radius: 4px;
     resize: none;
 }
+textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+textarea[disabled] {
+    background-color: #f0f0f0; /* Grayed-out background for disabled state */
+    color: #888; /* Lighter text color */
+    cursor: not-allowed; /* Indicate it's not editable */
+}
 
 button {
     background: #28a745;
